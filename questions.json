@@ -1,0 +1,37 @@
+{
+  "questions": [
+    {
+      "question": "12 / 4",
+    "solutions": [
+      { "correct": false,"text": 4 },
+      { "correct": false, "text": 1},
+      { "correct": false, "text": 6 },
+      { "correct": true, "text": 3 }
+    ]
+  }, {
+    "question": "7 x 9",
+    "solutions": [
+      { "correct": false,"text": 61 },
+      { "correct": false, "text": 67},
+      { "correct": false, "text": 54 },
+      { "correct": true, "text": 63 }
+    ]
+  }, {
+    "question": "22 - 9",
+    "solutions": [
+      { "correct": false,"text": 14 },
+      { "correct": false, "text": 12},
+      { "correct": false, "text": 15 },
+      { "correct": true, "text": 13 }
+    ]
+  }, {
+    "question": "22 + 9",
+    "solutions": [
+      { "correct": false,"text": 33 },
+      { "correct": false, "text": 32},
+      { "correct": false, "text": 29 },
+      { "correct": true, "text": 31 }
+    ]
+  }
+]
+}
