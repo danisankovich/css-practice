@@ -141,7 +141,7 @@ html {
   display: none;
 }
 #gameOver {
-  height: 200px;
+  height: 250px;
   width: 500px;
   background: linear-gradient(#f3ca6b, #f3706c);
   color: white;

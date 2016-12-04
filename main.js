@@ -3,11 +3,13 @@ const Load = function() {
   this.score = 0;
   this.timeremaining = 60;
   this.currentQuestion = 0;
+  this.wrongGuesses = 0;
 }
 const $timeDiv = document.getElementById('timeremaining')
 const $timeDivValue = document.getElementById('timeremainingvalue')
 const $startResetButton = document.getElementById('startreset');
 const $gameOver = document.getElementById('gameOver');
+const $question = document.getElementById('question');
 const $box1 = document.getElementById('box1');
 const $box2 = document.getElementById('box2');
 const $box3 = document.getElementById('box3');
@@ -15,62 +17,40 @@ const $box4 = document.getElementById('box4');
 const $scorevalue = document.getElementById('scorevalue');
 const $correct = document.getElementById('correct');
 const $wrong = document.getElementById('wrong');
+let questions = []
 
-$box1.onclick = (e) => {
-  if (questions[gameState.currentQuestion].solutions[0].correct) {
-    correctResponse();
-  } else {
-    incorrectResponse();
+const $boxes = [$box1, $box2, $box3, $box4]
+$boxes.forEach((e, i) => {
+  e.onclick = () => {
+    questions[gameState.currentQuestion].solutions[i].correct ? correctResponse() : incorrectResponse();
   }
-}
-$box2.onclick = (e) => {
-  if (questions[gameState.currentQuestion].solutions[1].correct) {
-    correctResponse();
-  } else {
-    incorrectResponse();
-  }
-}
-$box3.onclick = (e) => {
-  if (questions[gameState.currentQuestion].solutions[2].correct) {
-    correctResponse();
-  } else {
-    incorrectResponse();
-  }
-}
-$box4.onclick = (e) => {
-  if (questions[gameState.currentQuestion].solutions[3].correct) {
-    correctResponse();
-  } else {
-    incorrectResponse();
-  }
-}
+})
 const incorrectResponse = () => {
-  $correct.style.display = 'none'
+  $correct.style.display = 'none';
   $wrong.style.display = 'block';
+  gameState.wrongGuesses += 1;
 }
 const correctResponse = () => {
   $wrong.style.display = 'none';
   $correct.style.display = 'block'
   gameState.score += 1;
-  $scorevalue.innerHTML = gameState.score;
   gameState.currentQuestion += 1
+  $scorevalue.innerHTML = gameState.score;
   if (gameState.currentQuestion === questions.length) {
-    complete()
+    completeGame()
   } else {
-    $box1.innerHTML = questions[gameState.currentQuestion].solutions[0].text;
-    $box2.innerHTML = questions[gameState.currentQuestion].solutions[1].text;
-    $box3.innerHTML = questions[gameState.currentQuestion].solutions[2].text;
-    $box4.innerHTML = questions[gameState.currentQuestion].solutions[3].text;
+    $boxes.forEach((e, i) => {
+      e.innerHTML = questions[gameState.currentQuestion].solutions[i].text;
+    });
     $question.innerHTML = questions[gameState.currentQuestion].question;
   }
 }
-const complete = () => {
+const completeGame = () => {
   gameState.isPlaying = false
   $startResetButton.innerHTML = 'Reset Game'
   clearInterval(startTimer);
   displayResults();
 }
-const $question = document.getElementById('question');
 let gameState;
 const startGame = () => {
   $timeDiv.style.display = 'block'
@@ -78,10 +58,9 @@ const startGame = () => {
   $startResetButton.innerHTML = 'Stop Game'
   gameState = new Load();
   gameState.isPlaying = true;
-  $box1.innerHTML = questions[0].solutions[0].text;
-  $box2.innerHTML = questions[0].solutions[1].text;
-  $box3.innerHTML = questions[0].solutions[2].text;
-  $box4.innerHTML = questions[0].solutions[3].text;
+  $boxes.forEach((e, i) => {
+    e.innerHTML = questions[0].solutions[i].text;
+  })
   $question.innerHTML = questions[0].question;
   startTimer = setInterval(() => {
     gameState.timeremaining--
@@ -99,7 +78,7 @@ const stopGame = () => {
 }
 const displayResults = () => {
   const goPara = '<p>GAME OVER!<p>'
-  const scorePara = `<p>YOUR SCORE IS ${gameState.score}</p>`
+  const scorePara = `<p>YOUR SCORE IS ${gameState.score} with ${gameState.wrongGuesses} wrong guesses</p>`
   $gameOver.innerHTML = `${goPara}${scorePara}`
   $gameOver.style.display = 'block';
 }
@@ -113,7 +92,6 @@ $startreset.onclick = () => {
     stopGame()
   }
 }
-let questions = []
 
 const xmlhttp = new XMLHttpRequest();
 xmlhttp.open('GET', './questions.json', true);
